@@ -1,5 +1,6 @@
 # 公共配置文件
 spring:
+
   application:
     name: xianOJ-backend-judge-service
   # 默认 dev 环境
@@ -9,6 +10,10 @@ spring:
   mvc:
     pathmatch:
       matching-strategy: ant_path_matcher
+  cloud:
+    nacos:
+      discovery:
+        server-addr: localhost:8848
   # session 配置
   session:
     # todo 取消注释开启分布式 session（须先配置 Redis）
@@ -45,7 +50,7 @@ server:
   address: localhost
   port: 8104
   servlet:
-    context-path: /api
+    context-path: /api/judge
     # cookie 30 天过期
     session:
       cookie:

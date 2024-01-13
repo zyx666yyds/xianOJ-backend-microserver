@@ -15,8 +15,7 @@ import com.zyx.backendmodel.model.dto.question.QuestionJudgeCase;
 import com.zyx.backendmodel.model.entity.Question;
 import com.zyx.backendmodel.model.entity.QuestionSubmit;
 import com.zyx.backendmodel.model.enums.QuestionSubmitStatusEnum;
-import com.zyx.backendserviceclient.service.QuestionService;
-import com.zyx.backendserviceclient.service.QuestionSubmitService;
+import com.zyx.backendserviceclient.service.QuestionFeignClient;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -36,24 +35,23 @@ public class JudgeServiceImpl implements JudgeService {
     private String type;
 
     @Resource
-    private QuestionService questionService;
+    private QuestionFeignClient questionFeignClient;
 
     @Resource
     private JudgeManager judgeManager;
 
-    @Resource
-    private QuestionSubmitService questionSubmitService;
+
 
     @Override
     public QuestionSubmit doJudge(long questionSubmitId) {
         // 1.传入题目提交的id，查询题目提交记录
-        QuestionSubmit questionSubmit = questionSubmitService.getById(questionSubmitId);
+        QuestionSubmit questionSubmit = questionFeignClient.getQuestionSubmitById(questionSubmitId);
         if (questionSubmit == null) {
             throw new BusinessException(ErrorCode.NOT_FOUND_ERROR, "题目提交不存在");
         }
 
         Long questionId = questionSubmit.getQuestionId();
-        Question question = questionService.getById(questionId);
+        Question question = questionFeignClient.getQuestionById(questionId);
         if (question == null) {
             throw new BusinessException(ErrorCode.NOT_FOUND_ERROR, "题目不存在");
         }
@@ -65,7 +63,7 @@ public class JudgeServiceImpl implements JudgeService {
         QuestionSubmit questionSubmitUpdate = new QuestionSubmit();
         questionSubmitUpdate.setId(questionSubmitId);
         questionSubmitUpdate.setStatus(QuestionSubmitStatusEnum.RUNNING.getValue());
-        boolean updateById = questionSubmitService.updateById(questionSubmitUpdate);
+        boolean updateById = questionFeignClient.updateQuestionSubmitBiId(questionSubmitUpdate);
         if (!updateById) {
             throw new BusinessException(ErrorCode.OPERATION_ERROR, "更新题目提交状态失败");
         }
@@ -105,12 +103,12 @@ public class JudgeServiceImpl implements JudgeService {
         questionSubmitUpdate.setId(questionSubmitId);
         questionSubmitUpdate.setStatus(QuestionSubmitStatusEnum.SUCCEED.getValue());
         questionSubmitUpdate.setJudgeInfo(JSONUtil.toJsonStr(judgeInfo));
-        updateById = questionSubmitService.updateById(questionSubmitUpdate);
+        updateById = questionFeignClient.updateQuestionSubmitBiId(questionSubmitUpdate);
         if (!updateById) {
             throw new BusinessException(ErrorCode.OPERATION_ERROR, "更新题目提交状态失败");
         }
 
-        QuestionSubmit questionSubmitResult = questionSubmitService.getById(questionId);
+        QuestionSubmit questionSubmitResult = questionFeignClient.getQuestionSubmitById(questionId);
 
 
         return questionSubmitResult;

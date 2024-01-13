@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.zyx.backendmodel.model.dto.question.QuestionQueryRequest;
 import com.zyx.backendmodel.model.entity.Question;
 import com.zyx.backendmodel.model.vo.QuestionVO;
+import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -15,6 +16,7 @@ import javax.servlet.http.HttpServletRequest;
 * @description 针对表【question(题目)】的数据库操作Service
 * @createDate 2024-01-03 16:01:08
 */
+@Service
 public interface QuestionService extends IService<Question> {
     /**
      * 校验

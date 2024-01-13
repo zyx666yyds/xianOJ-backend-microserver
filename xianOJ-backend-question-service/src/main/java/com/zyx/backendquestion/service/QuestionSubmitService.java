@@ -9,12 +9,14 @@ import com.zyx.backendmodel.model.dto.questionsubmit.QuestionSubmitQueryRequest;
 import com.zyx.backendmodel.model.entity.QuestionSubmit;
 import com.zyx.backendmodel.model.entity.User;
 import com.zyx.backendmodel.model.vo.QuestionSubmitVO;
+import org.springframework.stereotype.Service;
 
 /**
  * @author 24088
  * @description 针对表【question_submit(题目提交)】的数据库操作Service
  * @createDate 2024-01-03 16:03:55
  */
+@Service
 public interface QuestionSubmitService extends IService<QuestionSubmit> {
     /**
      * 题目提交

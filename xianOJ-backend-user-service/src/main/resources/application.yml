@@ -17,6 +17,10 @@ spring:
     store-type: redis
     # 30 天过期
     timeout: 2592000
+  cloud:
+    nacos:
+      discovery:
+        server-addr: localhost:8848
   # 数据库配置
   # todo 需替换配置
   datasource:
@@ -47,7 +51,7 @@ server:
   address: localhost
   port: 8102
   servlet:
-    context-path: /api
+    context-path: /api/user
     # cookie 30 天过期
     session:
       cookie:

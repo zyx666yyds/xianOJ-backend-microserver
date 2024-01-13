@@ -1,0 +1,11 @@
+spring:
+  cloud:
+    nacos:
+      discovery:
+        server-addr: localhost:8848
+  application:
+    name: xianOJ-backend-gateway
+server:
+
+  address: localhost
+  port: 8105

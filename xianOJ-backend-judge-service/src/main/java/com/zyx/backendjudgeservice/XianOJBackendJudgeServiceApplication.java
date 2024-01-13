@@ -1,4 +1,4 @@
-package com.zyx.backendquestion;
+package com.zyx.backendjudgeservice;
 
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
@@ -16,14 +16,14 @@ import org.springframework.scheduling.annotation.EnableScheduling;
  */
 // todo 如需开启 Redis，须移除 exclude 中的内容
 @SpringBootApplication
-@MapperScan("com.zyx.backendquestion.mapper")
+@MapperScan("com.zyx.backendjudgeservice.mapper")
 @EnableScheduling
 @EnableAspectJAutoProxy(proxyTargetClass = true, exposeProxy = true)
 @ComponentScan("com.zyx")
 @EnableDiscoveryClient
 @EnableFeignClients(basePackages = {"com.zyx.backendserviceclient.service"})
-public class XianOJBackendQuestionServiceApplication {
+public class XianOJBackendJudgeServiceApplication {
     public static void main(String[] args) {
-        SpringApplication.run(XianOJBackendQuestionServiceApplication.class, args);
+        SpringApplication.run(XianOJBackendJudgeServiceApplication.class, args);
     }
 }

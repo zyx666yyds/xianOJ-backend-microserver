@@ -20,8 +20,8 @@ import com.zyx.backendmodel.model.vo.QuestionSubmitVO;
 import com.zyx.backendquestion.mapper.QuestionSubmitMapper;
 import com.zyx.backendquestion.service.QuestionService;
 import com.zyx.backendquestion.service.QuestionSubmitService;
-import com.zyx.backendserviceclient.service.JudgeService;
-import com.zyx.backendserviceclient.service.UserService;
+import com.zyx.backendserviceclient.service.JudgeFeignClient;
+import com.zyx.backendserviceclient.service.UserFeignClient;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.context.annotation.Lazy;
@@ -45,11 +45,11 @@ public class QuestionSubmitServiceImpl extends ServiceImpl<QuestionSubmitMapper,
     private QuestionService questionService;
 
     @Resource
-    private UserService userService;
+    private UserFeignClient userFeignClient;
 
     @Resource
     @Lazy
-    private JudgeService judgeService;
+    private JudgeFeignClient judgeFeignClient;
 
     /**
      * 提交题目
@@ -92,7 +92,7 @@ public class QuestionSubmitServiceImpl extends ServiceImpl<QuestionSubmitMapper,
         Long questionSubmitId = questionSubmit.getId();
         //todo 执行判题服务
         CompletableFuture.runAsync(() -> {
-            judgeService.doJudge(questionSubmitId);
+            judgeFeignClient.doJudge(questionSubmitId);
         });
         return questionSubmitId;
     }
@@ -145,7 +145,7 @@ public class QuestionSubmitServiceImpl extends ServiceImpl<QuestionSubmitMapper,
         //脱敏：仅本人和管理员可以看到自己的提交代码
         Long userId = loginUser.getId();
         //处理脱敏
-        if (!userId.equals(questionSubmit.getUserId()) && userService.isAdmin(loginUser)) {
+        if (!userId.equals(questionSubmit.getUserId()) && userFeignClient.isAdmin(loginUser)) {
             questionSubmitVO.setCode(null);
         }
         return questionSubmitVO;
