@@ -2,10 +2,25 @@ spring:
   cloud:
     nacos:
       discovery:
-        server-addr: localhost:8848
+        server-addr: 127.0.0.1:8848
+    gateway:
+      routes:
+        - id: xianOJ-backend-question-service
+          uri: lb://xianOJ-backend-question-service
+          predicates:
+            - Path=/api/question/**
+        - id: xianOJ-backend-user-service
+          uri: lb://xianOJ-backend-user-service
+          predicates:
+            - Path=/api/user/**
+        - id: xianOJ-backend-judge-service
+          uri: lb://xianOJ-backend-judge-service
+          predicates:
+            - Path=/api/judge/**
   application:
     name: xianOJ-backend-gateway
+  main:
+    web-application-type: reactive
 server:
-
   address: localhost
-  port: 8105
+  port: 8101
