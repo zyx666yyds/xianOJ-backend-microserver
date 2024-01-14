@@ -1,6 +1,5 @@
 # 公共配置文件
-# @author <a href="https://github.com/lizyx">程序员鱼皮</a>
-# @from <a href="https://zyx.icu">编程导航知识星球</a>
+
 spring:
   application:
     name: xianOJ-backend-user-service
@@ -48,7 +47,7 @@ spring:
       # 大小限制
       max-file-size: 10MB
 server:
-  address: localhost
+  address: 0.0.0.0
   port: 8102
   servlet:
     context-path: /api/user
@@ -56,6 +55,7 @@ server:
     session:
       cookie:
         max-age: 2592000
+        path: /api
 mybatis-plus:
   configuration:
     map-underscore-to-camel-case: false
@@ -68,3 +68,5 @@ mybatis-plus:
 # 代码沙箱配置
 codesandbox:
   type: remote
+knife4j:
+  enable: true

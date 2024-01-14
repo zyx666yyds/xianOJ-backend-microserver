@@ -10,7 +10,6 @@ import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
  * @version 1.0
  * @date 2024/1/12 012 11:50
  */
-// todo 如需开启 Redis，须移除 exclude 中的内容
 @SpringBootApplication(exclude = {DataSourceAutoConfiguration.class})
 @EnableDiscoveryClient
 public class XianOJBackendGatewayApplication {

@@ -46,7 +46,7 @@ spring:
       # 大小限制
       max-file-size: 10MB
 server:
-  address: localhost
+  address: 0.0.0.0
   port: 8103
   servlet:
     context-path: /api/question
@@ -54,6 +54,7 @@ server:
     session:
       cookie:
         max-age: 2592000
+        path: /api
 mybatis-plus:
   configuration:
     map-underscore-to-camel-case: false
@@ -66,3 +67,5 @@ mybatis-plus:
 # 代码沙箱配置
 codesandbox:
   type: remote
+knife4j:
+  enable: true
