@@ -18,6 +18,7 @@ import com.zyx.backendmodel.model.enums.QuestionSubmitLanguageEnum;
 import com.zyx.backendmodel.model.enums.QuestionSubmitStatusEnum;
 import com.zyx.backendmodel.model.vo.QuestionSubmitVO;
 import com.zyx.backendquestion.mapper.QuestionSubmitMapper;
+import com.zyx.backendquestion.rabbitmq.MyMessageProducer;
 import com.zyx.backendquestion.service.QuestionService;
 import com.zyx.backendquestion.service.QuestionSubmitService;
 import com.zyx.backendserviceclient.service.JudgeFeignClient;
@@ -50,6 +51,9 @@ public class QuestionSubmitServiceImpl extends ServiceImpl<QuestionSubmitMapper,
     @Resource
     @Lazy
     private JudgeFeignClient judgeFeignClient;
+
+    @Resource
+    private MyMessageProducer myMessageProducer;
 
     /**
      * 提交题目
@@ -90,10 +94,13 @@ public class QuestionSubmitServiceImpl extends ServiceImpl<QuestionSubmitMapper,
             throw new BusinessException(ErrorCode.SYSTEM_ERROR, "数据输入失败");
         }
         Long questionSubmitId = questionSubmit.getId();
-        //todo 执行判题服务
-        CompletableFuture.runAsync(() -> {
-            judgeFeignClient.doJudge(questionSubmitId);
-        });
+        //发送消息
+        myMessageProducer.sendMessage("code_exchange","my_routingKey",String.valueOf(questionSubmitId));
+
+        // 执行判题服务
+//        CompletableFuture.runAsync(() -> {
+//            judgeFeignClient.doJudge(questionSubmitId);
+//        });
         return questionSubmitId;
     }
 
