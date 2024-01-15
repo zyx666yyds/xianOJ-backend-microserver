@@ -1,0 +1,54 @@
+version: '3'
+services:
+  xianOJ-backend-gateway:
+    container_name: xianOJ-backend-gateway
+    build:
+      context: ./xianOJ-backend-gateway
+      dockerfile: Dockerfile
+    ports:
+      - "8101:8101"
+    networks:
+      - mynetwork
+
+  xianOJ-backend-user-service:
+    container_name: xianOJ-backend-user-service
+    build:
+      context: ./xianOJ-backend-user-service
+      dockerfile: Dockerfile
+    ports:
+      - "8102:8102"
+    networks:
+      - mynetwork
+    depends_on:
+      - xianOJ-backend-gateway
+
+  xianOJ-backend-question-service:
+    container_name: xianOJ-backend-question-service
+    build:
+      context: ./xianOJ-backend-question-service
+      dockerfile: Dockerfile
+    ports:
+      - "8103:8103"
+    networks:
+      - mynetwork
+    depends_on:
+      - xianOJ-backend-user-service
+      - xianOJ-backend-gateway
+
+  xianOJ-backend-judge-service:
+    container_name: xianOJ-backend-judge-service
+    build:
+      context: ./xianOJ-backend-judge-service
+      dockerfile: Dockerfile
+    ports:
+      - "8104:8104"
+    networks:
+      - mynetwork
+    depends_on:
+      - xianOJ-backend-user-service
+      - xianOJ-backend-question-service
+      - xianOJ-backend-gateway
+
+# 网络，不定义的话就是默认网络
+networks:
+  mynetwork:
