@@ -6,9 +6,7 @@ import java.io.Serializable;
 
 /**
  * 增加提交请求
- *
- * @author <a href="https://github.com/lizyx">程序员鱼皮</a>
- * @from <a href="https://zyx.icu">编程导航知识星球</a>
+ * @author zyx
  */
 @Data
 public class QuestionSubmitAddRequest implements Serializable {

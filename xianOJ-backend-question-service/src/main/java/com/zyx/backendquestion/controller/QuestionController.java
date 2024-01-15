@@ -33,8 +33,7 @@ import java.util.List;
 /**
  * 题目接口
  *
- * @author <a href="https://github.com/lizyx">程序员鱼皮</a>
- * @from <a href="https://zyx.icu">编程导航知识星球</a>
+
  */
 @RestController
 @RequestMapping("/")
@@ -309,14 +308,14 @@ public class QuestionController {
         if (questionSubmitAddRequest == null || questionSubmitAddRequest.getQuestionId() <= 0) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
-        // 登录才能点赞
+
         final User loginUser = userFeignService.getLoginUser(request);
         long questionSubmitId = questionSubmitService.doQuestionSubmit(questionSubmitAddRequest, loginUser);
         return ResultUtils.success(questionSubmitId);
     }
 
     /**
-     * 分页获取题目提交列表（除管理员外，普通用户只能看到非答案、提交代码等公开信息）
+     * 分页获取题目提交列表（除管理员外，普通用户只能看到非答案、提交代码等公开信息）CGLIB$CALLBACK_2 = {CglibAopProxy$SerializableNoOp@15844}
      *
      * @param questionSubmitQueryRequest
      * @return

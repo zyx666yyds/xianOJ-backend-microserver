@@ -31,8 +31,7 @@ import static com.zyx.backenduserservice.service.impl.UserServiceImpl.SALT;
 /**
  * 用户接口
  *
- * @author <a href="https://github.com/lizyx">程序员鱼皮</a>
- * @from <a href="https://zyx.icu">编程导航知识星球</a>
+
  */
 @RestController
 @RequestMapping("/")

@@ -41,7 +41,6 @@ public class JudgeServiceImpl implements JudgeService {
     private JudgeManager judgeManager;
 
 
-
     @Override
     public QuestionSubmit doJudge(long questionSubmitId) {
         // 1.传入题目提交的id，查询题目提交记录
@@ -67,7 +66,7 @@ public class JudgeServiceImpl implements JudgeService {
         if (!updateById) {
             throw new BusinessException(ErrorCode.OPERATION_ERROR, "更新题目提交状态失败");
         }
-
+        question.setSubmitNum(question.getSubmitNum() + 1);
         // 4.调用沙箱，获取到执行结果
         CodeSandbox codeSandbox = CodeSandboxFactory.newInstance(type);
         codeSandbox = new CodeSandboxProxy(codeSandbox);
@@ -85,6 +84,7 @@ public class JudgeServiceImpl implements JudgeService {
                 .build();
         ExecuteCodeResponse executeCodeResponse = codeSandbox.executeCode(builder);
         List<String> outputList = executeCodeResponse.getOutputList();
+        question.setAcceptedNum(question.getAcceptedNum() + 1);
 
         // 5.根据沙箱执行结果，设置题目的判题状态和信息
         JudgeContext judgeContext = new JudgeContext();
@@ -102,15 +102,14 @@ public class JudgeServiceImpl implements JudgeService {
         questionSubmitUpdate = new QuestionSubmit();
         questionSubmitUpdate.setId(questionSubmitId);
         questionSubmitUpdate.setStatus(QuestionSubmitStatusEnum.SUCCEED.getValue());
+
         questionSubmitUpdate.setJudgeInfo(JSONUtil.toJsonStr(judgeInfo));
         updateById = questionFeignClient.updateQuestionSubmitBiId(questionSubmitUpdate);
         if (!updateById) {
             throw new BusinessException(ErrorCode.OPERATION_ERROR, "更新题目提交状态失败");
         }
 
-        QuestionSubmit questionSubmitResult = questionFeignClient.getQuestionSubmitById(questionId);
 
-
-        return questionSubmitResult;
+        return questionFeignClient.getQuestionSubmitById(questionId);
     }
 }

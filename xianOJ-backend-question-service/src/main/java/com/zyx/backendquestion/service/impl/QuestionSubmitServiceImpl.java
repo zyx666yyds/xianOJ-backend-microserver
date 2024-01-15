@@ -53,7 +53,7 @@ public class QuestionSubmitServiceImpl extends ServiceImpl<QuestionSubmitMapper,
     private JudgeFeignClient judgeFeignClient;
 
     @Resource
-    private MyMessageProducer myMessageProducer;
+    private MyMessageProducer  myMessageProducer;
 
     /**
      * 提交题目
@@ -89,18 +89,20 @@ public class QuestionSubmitServiceImpl extends ServiceImpl<QuestionSubmitMapper,
         // 设置初始状态
         questionSubmit.setStatus(QuestionSubmitStatusEnum.WAITING.getValue());
         questionSubmit.setJudgeInfo("{}");
+        question.setSubmitNum(question.getSubmitNum() + 1);
         boolean save = this.save(questionSubmit);
         if (!save) {
             throw new BusinessException(ErrorCode.SYSTEM_ERROR, "数据输入失败");
         }
+
         Long questionSubmitId = questionSubmit.getId();
-        //发送消息
-        myMessageProducer.sendMessage("code_exchange","my_routingKey",String.valueOf(questionSubmitId));
+//        //发送消息
+//        myMessageProducer.sendMessage("code_exchange","my_routingKey",String.valueOf(questionSubmitId));
 
         // 执行判题服务
-//        CompletableFuture.runAsync(() -> {
-//            judgeFeignClient.doJudge(questionSubmitId);
-//        });
+        CompletableFuture.runAsync(() -> {
+            judgeFeignClient.doJudge(questionSubmitId);
+        });
         return questionSubmitId;
     }
 

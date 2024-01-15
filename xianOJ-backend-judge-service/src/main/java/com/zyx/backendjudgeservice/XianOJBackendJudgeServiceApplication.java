@@ -9,6 +9,8 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
+import static com.zyx.backendjudgeservice.rabbitmq.InitRabbitMq.doInit;
+
 /**
  * @author zyx
  * @version 1.0
@@ -24,6 +26,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @EnableFeignClients(basePackages = {"com.zyx.backendserviceclient.service"})
 public class XianOJBackendJudgeServiceApplication {
     public static void main(String[] args) {
+//        doInit();
         SpringApplication.run(XianOJBackendJudgeServiceApplication.class, args);
     }
 }

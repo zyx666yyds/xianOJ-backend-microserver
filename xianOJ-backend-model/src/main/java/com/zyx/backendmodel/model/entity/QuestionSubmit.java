@@ -8,6 +8,7 @@ import java.util.Date;
 
 /**
  * 题目提交
+ * @author 24088
  * @TableName question_submit
  */
 @TableName(value ="question_submit")

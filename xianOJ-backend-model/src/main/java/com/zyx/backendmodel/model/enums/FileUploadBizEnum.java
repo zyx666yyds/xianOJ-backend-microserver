@@ -9,8 +9,7 @@ import java.util.stream.Collectors;
 /**
  * 文件上传业务类型枚举
  *
- * @author <a href="https://github.com/lizyx">程序员鱼皮</a>
- * @from <a href="https://zyx.icu">编程导航知识星球</a>
+
  */
 public enum FileUploadBizEnum {
 
