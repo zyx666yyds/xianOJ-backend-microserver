@@ -94,7 +94,7 @@ public class QuestionSubmitServiceImpl extends ServiceImpl<QuestionSubmitMapper,
         if (!save) {
             throw new BusinessException(ErrorCode.SYSTEM_ERROR, "数据输入失败");
         }
-
+        questionService.saveOrUpdate(question);
         Long questionSubmitId = questionSubmit.getId();
 //        //发送消息
 //        myMessageProducer.sendMessage("code_exchange","my_routingKey",String.valueOf(questionSubmitId));

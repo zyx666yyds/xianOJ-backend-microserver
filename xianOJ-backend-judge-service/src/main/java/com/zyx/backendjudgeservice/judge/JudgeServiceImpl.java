@@ -23,6 +23,7 @@ import javax.annotation.Resource;
 import java.util.List;
 import java.util.stream.Collectors;
 
+
 /**
  * @author zyx
  * @version 1.0
@@ -39,6 +40,7 @@ public class JudgeServiceImpl implements JudgeService {
 
     @Resource
     private JudgeManager judgeManager;
+
 
 
     @Override
@@ -62,11 +64,10 @@ public class JudgeServiceImpl implements JudgeService {
         QuestionSubmit questionSubmitUpdate = new QuestionSubmit();
         questionSubmitUpdate.setId(questionSubmitId);
         questionSubmitUpdate.setStatus(QuestionSubmitStatusEnum.RUNNING.getValue());
-        boolean updateById = questionFeignClient.updateQuestionSubmitBiId(questionSubmitUpdate);
+        boolean updateById = questionFeignClient.updateQuestionSubmitById(questionSubmitUpdate);
         if (!updateById) {
             throw new BusinessException(ErrorCode.OPERATION_ERROR, "更新题目提交状态失败");
         }
-        question.setSubmitNum(question.getSubmitNum() + 1);
         // 4.调用沙箱，获取到执行结果
         CodeSandbox codeSandbox = CodeSandboxFactory.newInstance(type);
         codeSandbox = new CodeSandboxProxy(codeSandbox);
@@ -84,8 +85,6 @@ public class JudgeServiceImpl implements JudgeService {
                 .build();
         ExecuteCodeResponse executeCodeResponse = codeSandbox.executeCode(builder);
         List<String> outputList = executeCodeResponse.getOutputList();
-        question.setAcceptedNum(question.getAcceptedNum() + 1);
-
         // 5.根据沙箱执行结果，设置题目的判题状态和信息
         JudgeContext judgeContext = new JudgeContext();
         judgeContext.setJudgeInfo(executeCodeResponse.getJudgeInfo());
@@ -102,9 +101,13 @@ public class JudgeServiceImpl implements JudgeService {
         questionSubmitUpdate = new QuestionSubmit();
         questionSubmitUpdate.setId(questionSubmitId);
         questionSubmitUpdate.setStatus(QuestionSubmitStatusEnum.SUCCEED.getValue());
+        if (questionSubmitUpdate.getStatus() == 2){
+            question.setAcceptedNum(question.getAcceptedNum() + 1);
+            questionFeignClient.updateQuestionById(question);
+        }
 
         questionSubmitUpdate.setJudgeInfo(JSONUtil.toJsonStr(judgeInfo));
-        updateById = questionFeignClient.updateQuestionSubmitBiId(questionSubmitUpdate);
+        updateById = questionFeignClient.updateQuestionSubmitById(questionSubmitUpdate);
         if (!updateById) {
             throw new BusinessException(ErrorCode.OPERATION_ERROR, "更新题目提交状态失败");
         }

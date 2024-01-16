@@ -32,8 +32,6 @@ import java.util.List;
 
 /**
  * 题目接口
- *
-
  */
 @RestController
 @RequestMapping("/")
@@ -165,6 +163,7 @@ public class QuestionController {
         }
         return ResultUtils.success(questionService.getQuestionVO(question, request));
     }
+
     /**
      * 根据 id 获取
      *
@@ -182,7 +181,7 @@ public class QuestionController {
         }
         User userLogin = userFeignService.getLoginUser(request);
         //不是本人或管理员  --没有权限
-        if (!question.getUserId().equals(userLogin.getId()) && !userFeignService.isAdmin(userLogin)){
+        if (!question.getUserId().equals(userLogin.getId()) && !userFeignService.isAdmin(userLogin)) {
             throw new BusinessException(ErrorCode.NO_AUTH_ERROR);
         }
         return ResultUtils.success(question);
@@ -290,9 +289,6 @@ public class QuestionController {
         boolean result = questionService.updateById(question);
         return ResultUtils.success(result);
     }
-
-
-
 
 
     /**
